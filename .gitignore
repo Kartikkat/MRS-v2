@@ -1,4 +1,4 @@
-"env/" 
-"artifacts/similarity.pkl" 
-"Data/tmdb_5000_credits.csv" 
-"Data/tmdb_5000_movies.csv" 
+env/
+Artifacts/
+Data/
+
