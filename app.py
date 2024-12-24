@@ -21,35 +21,30 @@ def recommend(movie):
         recommended_movie_posters.append(fetch_poster(movie_id))
         recommended_movie_names.append(movies.iloc[i[0]].title)
 
-    return recommended_movie_names,recommended_movie_posters
+    return recommended_movie_names, recommended_movie_posters
 
+# Streamlit app
+st.title('Movie Recommender System')
+st.write('Using Machine Learning to recommend movies based on your preferences.')
 
-st.header('Movie Recommender System Using Machine Learning')
-movies = pickle.load(open('Artifacts/movie_list.pkl','rb'))
-similarity = pickle.load(open('Artifacts/similarity.pkl','rb'))
+# Load the movie list and similarity matrix
+movies = pickle.load(open('Artifacts/movie_list.pkl', 'rb'))
+similarity = pickle.load(open('Artifacts/similarity.pkl', 'rb'))
 
+# Movie selection
 movie_list = movies['title'].values
 selected_movie = st.selectbox(
     "Type or select a movie from the dropdown",
     movie_list
 )
 
-if st.button('Show Recommendation'):
-    recommended_movie_names,recommended_movie_posters = recommend(selected_movie)
-    col1, col2, col3, col4, col5 = st.columns(5)
-    with col1:
-        st.text(recommended_movie_names[0])
-        st.image(recommended_movie_posters[0])
-    with col2:
-        st.text(recommended_movie_names[1])
-        st.image(recommended_movie_posters[1])
+# Number of recommendations
+num_recommendations = st.slider('Number of recommendations', 1, 10, 5)
 
-    with col3:
-        st.text(recommended_movie_names[2])
-        st.image(recommended_movie_posters[2])
-    with col4:
-        st.text(recommended_movie_names[3])
-        st.image(recommended_movie_posters[3])
-    with col5:
-        st.text(recommended_movie_names[4])
-        st.image(recommended_movie_posters[4])
+# Display recommendations
+if st.button('Recommend'):
+    names, posters = recommend(selected_movie)
+    st.write(f"Top {num_recommendations} recommendations for {selected_movie}:")
+    for i in range(num_recommendations):
+        st.image(posters[i], width=150)
+        st.write(names[i])
